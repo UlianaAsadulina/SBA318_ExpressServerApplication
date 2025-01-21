@@ -16,6 +16,11 @@ const error = require("./utilities/error");
 
 
 //- Routes
+
+// Use our inported Routes
+app.use("/elixirs", elixirs);
+app.use("/ingredients", ingredients);
+
 app.get("/", (req,res) => {
     res.send("Home page for Professor Severus Snape's students");
 })
