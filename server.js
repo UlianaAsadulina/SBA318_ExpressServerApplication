@@ -3,13 +3,16 @@ const app = express();
 
 const PORT = 3000;
 
+const bodyParser = require("body-parser");//--> bring body parser
 
 // route imports
 const elixirs = require("./routes/elixirs");
 const ingredients = require("./routes/ingredients");
+const wizards = require('./routes/wizards');
 
 //import for error handle
 const error = require("./utilities/error");
+
 
 
 //---Middleware
@@ -21,14 +24,9 @@ app.use(bodyParser.json({ extended: true }));
 // Logging Middlewaare
 app.use((req, res, next) => {
     const time = new Date();
-
-    console.log(
-    `-----
-    ${time.toLocaleTimeString()}: Received a ${req.method} request to ${req.url}.`
-    );
+    console.log(`---> ${time.toLocaleTimeString()}: Received a ${req.method} request to ${req.url}.`);
     if (Object.keys(req.body).length > 0) {
-        console.log("Containing the data:");
-        console.log(`${JSON.stringify(req.body)}`);
+        console.log(`Containing the data: ${JSON.stringify(req.body)}`);
     }
     next();
 });
@@ -38,6 +36,7 @@ app.use((req, res, next) => {
 // Use our inported Routes
 app.use("/elixirs", elixirs);
 app.use("/ingredients", ingredients);
+app.use("/wizards", wizards);
 
 app.get("/", (req,res) => {
     res.send("Home page for Professor Severus Snape's students");
@@ -60,5 +59,5 @@ app.use((err, req, res, next) => {
 
 //--start server
 app.listen(PORT, () => {
-    console.log(`Server starts on PORT ${PORT}`);
+    console.log(`Server is Listening on PORT ${PORT}`);
 })

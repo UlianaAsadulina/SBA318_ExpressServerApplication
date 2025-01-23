@@ -14,19 +14,28 @@ router
         res.json(ingredients);
     })
     .post((req, res, next) => {
-        //if  the body of the post request contain id and name
-        if (req.body.id && req.body.name) {
-            //create a new variable with body request
-            const ingredient = {
-                id: ingredients[ingredients.length - 1].id + 1,          
-                name: req.body.name
-            };
-            //add this variable to the array of ingredients
-            ingredients.push(ingredient);
-            //send sesponse in JSON format
-            res.json(ingredients[ingredients.length - 1]);
-        } else //if the body of the post request do not contain data - call an error function
-            next(error(400, "Insufficient Data"));
+        //if  the body of the post request contain name
+        if (req.body.name) {
+            //check if this ingredient already exists
+            if (ingredients.find((ingr) => ingr.name === req.body.name)) {
+                next(error(409, `Ingredient already in database`));
+            } 
+            else {
+                //create a new variable with body request
+                const ingredient = {
+                    id: ingredients[ingredients.length - 1].id + 1,          
+                    name: req.body.name
+                };
+                //add this variable to the array of ingredients
+                ingredients.push(ingredient);
+                //send sesponse in JSON format
+                console.log(`Array of ingredients ${ingredients.length}`);
+                res.json(ingredients[ingredients.length - 1]);
+                console.log("Ingredient successfully added");
+                
+            }
+        } else //if the body of the post request do not contain data or not enough data - call an error function
+            next(error(400, "Not enough Data to Create"));
     });
     
 
